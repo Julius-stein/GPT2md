@@ -1,4 +1,10 @@
 (() => {
+  // ----------------------------
+  // 0) 配置对象
+  // ----------------------------
+  const exportOptions = {
+    removeHr: true
+  };
   
   // ----------------------------
   // 1) 定位每条 assistant 消息
@@ -113,7 +119,9 @@
 
       case "table": return tableToMarkdown(node);
 
-      case "hr": return "\n---\n\n";
+      case "hr": 
+        if (exportOptions.removeHr) return "";
+        return "\n---\n\n";
       case "br": return "\n";
 
       default: return children(node);
