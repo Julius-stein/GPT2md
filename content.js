@@ -108,11 +108,17 @@
       case "em":
       case "i": return "*" + children(node) + "*";
 
-      case "blockquote":
-        return children(node)
-          .split("\n")
-          .map(line => (line ? "> " + line : ""))
-          .join("\n") + "\n\n";
+      case "blockquote": {
+        let content = children(node).trim();
+
+        // 删除尾部空行
+        content = content.replace(/\n+$/, "");
+
+        // 给整块添加前缀
+        content = content.replace(/^/gm, "> ");
+
+        return content + "\n\n";
+      }
 
       case "ul": return list(node, "- ", 0);
       case "ol": return list(node, "1. ", 0);
@@ -304,6 +310,22 @@
   );
   }
 
+  function normalizeMarkdown(md) {
+  // 1 去掉行尾多余空格
+  md = md.replace(/[ \t]+$/gm, "");
+
+  // 2️ 超过 2 个连续空行压缩为 2 个
+  md = md.replace(/\n{3,}/g, "\n\n");
+
+  // 3️ 文件开头空行删除
+  md = md.replace(/^\n+/, "");
+
+  // 4️ 文件结尾空行压缩为 1 个
+  md = md.replace(/\n+$/, "\n");
+
+  return md;
+}
+
   // ----------------------------
   // 4) 导出本条：clone -> 替换公式 -> innerText
   // ----------------------------
@@ -314,14 +336,16 @@
     // 删除导出按钮等
     clone.querySelectorAll(".export-btn").forEach(el => el.remove());
 
-    let md = nodeToMarkdown(clone).trim();
+    let md = nodeToMarkdown(clone);
 
     // 简洁模式：删除 emoji
     if (exportOptions.simpleMode) {
       md = removeEmojis(md);
     }
 
-    return md.trim() + "\n";
+    md = normalizeMarkdown(md);
+
+    return md;
   }
 
   // ----------------------------
