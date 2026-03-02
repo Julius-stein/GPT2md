@@ -3,7 +3,8 @@
   // 0) 配置对象
   // ----------------------------
   const exportOptions = {
-    removeHr: true
+    removeHr: true,  // 是否删除分割线
+    simpleMode: true  // 简洁模式(删除 emoji)
   };
   
   // ----------------------------
@@ -284,6 +285,13 @@
     return md + "\n";
   }
 
+  function removeEmojis(text) {
+  return text.replace(
+    /[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu,
+    ""
+  );
+  }
+
   // ----------------------------
   // 4) 导出本条：clone -> 替换公式 -> innerText
   // ----------------------------
@@ -294,7 +302,14 @@
     // 删除导出按钮等
     clone.querySelectorAll(".export-btn").forEach(el => el.remove());
 
-    return nodeToMarkdown(clone).trim() + "\n";
+    let md = nodeToMarkdown(clone).trim();
+
+    // 简洁模式：删除 emoji
+    if (exportOptions.simpleMode) {
+      md = removeEmojis(md);
+    }
+
+    return md.trim() + "\n";
   }
 
   // ----------------------------
