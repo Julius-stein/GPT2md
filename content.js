@@ -105,6 +105,11 @@
       case "strong":
       case "b": return "**" + children(node) + "**";
 
+      case "del":
+      case "s":
+      case "strike":
+        return "~~" + children(node) + "~~";
+
       case "em":
       case "i": return "*" + children(node) + "*";
 
@@ -296,18 +301,83 @@
       md += "| " + rowText + " |\n";
 
       if (i === 0) {
-        md += "| " + Array(cells.length).fill("---").join(" | ") + " |\n";
+        const aligns = Array.from(cells).map(cell => getColumnAlign(cell));
+        const sep = aligns.map(a => {
+          if (a === "left") return ":---";
+          if (a === "center") return ":---:";
+          if (a === "right") return "---:";
+          return "---";
+        });
+        md += "| " + sep.join(" | ") + " |\n";
       }
     });
 
     return md + "\n";
   }
 
+  function getColumnAlign(cell) {
+    // 1️ align 属性
+    const attr = cell.getAttribute("align");
+    if (attr) {
+      return attr.toLowerCase();
+    }
+
+    // 2️ style 内联
+    const style = cell.style?.textAlign;
+    if (style) {
+      return style.toLowerCase();
+    }
+
+    // 3️ 读取 computed style（更保险）
+    const computed = window.getComputedStyle(cell).textAlign;
+    if (computed) {
+      if (computed === "left") return "left";
+      if (computed === "center") return "center";
+      if (computed === "right") return "right";
+    }
+
+    return null;
+  }
+
+  // ----------------------------
+  // 4) 导出本条：clone -> 替换公式 -> innerText
+  // ----------------------------
+  function exportOneMessage(msg) {
+    const root = findContentRoot(msg);
+    const clone = root.cloneNode(true);
+
+    // 删除导出按钮等
+    clone.querySelectorAll(".export-btn").forEach(el => el.remove());
+
+    let md = nodeToMarkdown(clone);
+
+    // 简洁模式：删除 emoji
+    if (exportOptions.simpleMode) {
+      md = normalizeNumberEmoji(md); // 1️⃣ 数字 emoji 规范化（放在删除 emoji 前）
+      md = removeEmojis(md);
+    }
+
+    md = normalizeMarkdown(md);
+
+    return md;
+  }
+
+  function normalizeNumberEmoji(text) {
+    return text.replace(
+      /((?:[0-9]\uFE0F?\u20E3)+)/g,
+      (match) => {
+        // 提取其中所有数字
+        const digits = match.match(/[0-9]/g).join("");
+        return digits + ".";
+      }
+    );
+  }
+
   function removeEmojis(text) {
-  return text.replace(
-    /[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu,
-    ""
-  );
+    return text.replace(
+      /[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu,
+      ""
+    );
   }
 
   function normalizeMarkdown(md) {
@@ -324,29 +394,9 @@
   md = md.replace(/\n+$/, "\n");
 
   return md;
-}
-
-  // ----------------------------
-  // 4) 导出本条：clone -> 替换公式 -> innerText
-  // ----------------------------
-  function exportOneMessage(msg) {
-    const root = findContentRoot(msg);
-    const clone = root.cloneNode(true);
-
-    // 删除导出按钮等
-    clone.querySelectorAll(".export-btn").forEach(el => el.remove());
-
-    let md = nodeToMarkdown(clone);
-
-    // 简洁模式：删除 emoji
-    if (exportOptions.simpleMode) {
-      md = removeEmojis(md);
-    }
-
-    md = normalizeMarkdown(md);
-
-    return md;
   }
+
+
 
   // ----------------------------
   // 5) 按钮注入
