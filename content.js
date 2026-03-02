@@ -98,6 +98,7 @@
       case "h1": return "# " + children(node) + "\n\n";
       case "h2": return "## " + children(node) + "\n\n";
       case "h3": return "### " + children(node) + "\n\n";
+      case "h4": return "#### " + children(node) + "\n\n";
 
       case "p": return children(node).trim() + "\n\n";
 
@@ -239,15 +240,26 @@
       const p = prefix === "1. " ? `${index++}. ` : prefix;
 
       // 先拿当前 li 的“非列表子节点”
+      let checkboxPrefix = "";
+      const checkbox = li.querySelector("input[type='checkbox']");
+
+      if (checkbox) {
+        checkboxPrefix = checkbox.checked ? "[x] " : "[ ] ";
+      }
+
+      // 构造内容时跳过 input
       let content = "";
       li.childNodes.forEach(child => {
         const tag = child.tagName?.toLowerCase();
+
+        if (tag === "input") return; // 不重复输出
+
         if (tag !== "ul" && tag !== "ol") {
           content += nodeToMarkdown(child);
         }
       });
 
-      md += indent + p + content.trim() + "\n";
+      md += indent + p + checkboxPrefix + content.trim() + "\n";
 
       // 再处理嵌套列表
       li.childNodes.forEach(child => {
