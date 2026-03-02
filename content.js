@@ -4,7 +4,7 @@
   // ----------------------------
   const exportOptions = {
     removeHr: true,  // 是否删除分割线
-    simpleMode: true  // 简洁模式(删除 emoji)
+    simpleMode: true  // 简洁模式(删除 emoji，删除结尾建议部分)
   };
   
   // ----------------------------
@@ -132,9 +132,7 @@
 
       case "table": return tableToMarkdown(node);
 
-      case "hr": 
-        if (exportOptions.removeHr) return "";
-        return "\n---\n\n";
+      case "hr": return "\n---\n\n";
       case "br": return "\n";
 
       default: return children(node);
@@ -357,6 +355,15 @@
       md = removeEmojis(md);
     }
 
+    // 尾部裁剪：删除最后的建议部分（最后一个分割线以下）
+    if (exportOptions.simpleMode) {
+      md = trimAfterLastHr(md); 
+    }
+
+    if (exportOptions.removeHr) {
+      md = md.replace(/^\s*---+\s*$/gm, "");
+    }
+
     md = normalizeMarkdown(md);
 
     return md;
@@ -394,6 +401,16 @@
   md = md.replace(/\n+$/, "\n");
 
   return md;
+  }
+
+  function trimAfterLastHr(md) {
+    const hrRegex = /\n---+\n/g;
+    const matches = [...md.matchAll(hrRegex)];
+
+    if (matches.length === 0) return md;
+
+    const lastMatch = matches[matches.length - 1];
+    return md.slice(0, lastMatch.index).trim();
   }
 
 
