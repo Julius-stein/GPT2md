@@ -31,7 +31,6 @@
       ],
       "js": [
         "mdRenderer.js",
-        "notionRenderer.js",
         "content.js"],
       "run_at": "document_idle"
     }
