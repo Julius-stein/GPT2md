@@ -110,6 +110,20 @@
       case "strike":
         return "~~" + children(node) + "~~";
 
+      case "a": {
+        const href = node.getAttribute("href") || "";
+        const text = children(node).trim();
+
+        if (!href) return text;
+
+        // 如果文本本身就是链接，避免重复
+        if (text === href) {
+          return `<${href}>`;
+        }
+
+        return `[${text}](${href})`;
+      }
+
       case "em":
       case "i": return "*" + children(node) + "*";
 
