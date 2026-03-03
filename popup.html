@@ -1,27 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="popup.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Export Settings</title>
+  <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Chrome Extension</h1>
-        </div>
-        <div class="content">
-            <div class="input-container">
-                <input type="text" id="input" placeholder="请输入内容">
-                <button id="submit">提交</button>
-            </div>
-            <div class="result-container">
-                <h2>结果</h2>
-                <p id="result"></p>
-            </div>
-        </div>
-    </div>
+  <main class="popup">
+    <header class="popup__header">
+      <p class="popup__eyebrow">GPT to Markdown</p>
+      <h1>Export Settings</h1>
+      <p class="popup__desc">Control whether Markdown export keeps emojis, dividers, and the tail suggestion block.</p>
+    </header>
+
+    <section class="settings" aria-label="Export settings">
+      <label class="setting">
+        <span class="setting__copy">
+          <span class="setting__title">Keep emojis</span>
+          <span class="setting__desc">Turn off to remove most emojis and number-style emoji markers.</span>
+        </span>
+        <input id="keepEmojis" type="checkbox">
+      </label>
+
+      <label class="setting">
+        <span class="setting__copy">
+          <span class="setting__title">Keep dividers</span>
+          <span class="setting__desc">Turn off to remove Markdown horizontal rules such as `---`.</span>
+        </span>
+        <input id="keepHr" type="checkbox">
+      </label>
+
+      <label class="setting">
+        <span class="setting__copy">
+          <span class="setting__title">Keep tail block</span>
+          <span class="setting__desc">Turn off to trim the suggestion area after the last divider.</span>
+        </span>
+        <input id="keepTail" type="checkbox">
+      </label>
+    </section>
+
+    <p id="status" class="status" aria-live="polite"></p>
+  </main>
+
+  <script src="popup.js"></script>
 </body>
-<body>
+</html>

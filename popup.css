@@ -1,0 +1,98 @@
+:root {
+  color-scheme: light;
+  --panel: #fffaf2;
+  --text: #1f1a16;
+  --muted: #6b6259;
+  --line: #d8cdbf;
+  --accent: #c46a2d;
+  --accent-soft: rgba(196, 106, 45, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(circle at top left, #ffe4c8 0, transparent 38%),
+    linear-gradient(160deg, #f7f1e7 0%, #efe4d5 100%);
+  color: var(--text);
+  font: 14px/1.45 "Segoe UI", "Microsoft YaHei", sans-serif;
+}
+
+.popup {
+  padding: 18px;
+}
+
+.popup__header h1 {
+  margin: 4px 0 8px;
+  font-size: 22px;
+}
+
+.popup__eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.popup__desc {
+  margin: 0;
+  color: var(--muted);
+}
+
+.settings {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.setting {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel);
+  box-shadow: 0 10px 24px rgba(78, 52, 24, 0.06);
+}
+
+.setting__copy {
+  display: grid;
+  gap: 4px;
+}
+
+.setting__title {
+  font-weight: 700;
+}
+
+.setting__desc {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.setting input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--accent);
+}
+
+.status {
+  min-height: 20px;
+  margin: 14px 2px 0;
+  color: var(--accent);
+  font-size: 12px;
+}
+
+.status.is-saved {
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+}
