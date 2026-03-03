@@ -29,9 +29,11 @@
         "https://chatgpt.com/*",
         "https://chat.openai.com/*"
       ],
-      "js": ["content.js"],
-      "run_at": "document_idle",
-      "type": "module"
+      "js": [
+        "mdRenderer.js",
+        "notionRenderer.js",
+        "content.js"],
+      "run_at": "document_idle"
     }
   ]
 }

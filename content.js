@@ -1,4 +1,3 @@
-import { nodeToMarkdown } from "./markdownRenderer.js";
 // ----------------------------
 // 0) 配置对象
 // ----------------------------
@@ -60,7 +59,7 @@ function exportOneMessage(msg) {
   // 删除导出按钮等
   clone.querySelectorAll(".export-btn").forEach(el => el.remove());
 
-  const md = nodeToMarkdown(clone);
+  let md = nodeToMarkdown(clone);
 
   // 简洁模式：删除 emoji
   if (exportOptions.simpleMode) {

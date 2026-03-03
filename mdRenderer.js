@@ -3,7 +3,7 @@
 // ----------------------------
 // KaTeX 无损：annotation -> TeX
 // ----------------------------
-export function nodeToMarkdown(node) {
+function nodeToMarkdown(node) {
 if (!node) return "";
 
 // 文本节点
