@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "author": "My Name",
   "description": "Add a Markdown export button to each assistant message.",
-  "permissions": ["downloads", "storage"],
+  "permissions": ["downloads", "storage", "tabs"],
   "host_permissions": [
     "https://chatgpt.com/*",
     "https://chat.openai.com/*",
@@ -22,7 +22,9 @@
       "128": "icon.png"
     }
   },
-  
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
       "matches": [

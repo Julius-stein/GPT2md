@@ -1,6 +1,7 @@
 :root {
   color-scheme: light;
-  --panel: #fffaf2;
+  --panel: rgba(255, 250, 242, 0.92);
+  --surface: rgba(255, 255, 255, 0.76);
   --text: #1f1a16;
   --muted: #6b6259;
   --line: #d8cdbf;
@@ -23,12 +24,14 @@ body {
 }
 
 .popup {
-  padding: 18px;
+  display: grid;
+  gap: 12px;
+  padding: 14px;
 }
 
 .popup__header h1 {
-  margin: 4px 0 8px;
-  font-size: 22px;
+  margin: 2px 0 6px;
+  font-size: 20px;
 }
 
 .popup__eyebrow {
@@ -45,10 +48,87 @@ body {
   color: var(--muted);
 }
 
+.panel {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel);
+  box-shadow: 0 10px 22px rgba(78, 52, 24, 0.06);
+}
+
+.panel__head {
+  display: grid;
+  gap: 4px;
+}
+
+.panel__head h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.panel__head p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.buttonRow,
+.buttonGrid {
+  display: grid;
+  gap: 8px;
+}
+
+.buttonGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.buttonGrid .button--ghost {
+  grid-column: 1 / -1;
+}
+
+.button {
+  min-height: 38px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 12px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.button--primary {
+  background: #ffffff;
+  color: var(--text);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.button--accent {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 10px 18px rgba(196, 106, 45, 0.2);
+}
+
+.button--ghost {
+  background: rgba(196, 106, 45, 0.12);
+  color: #8a4719;
+}
+
 .settings {
   display: grid;
-  gap: 12px;
-  margin-top: 18px;
+  gap: 10px;
 }
 
 .setting {
@@ -56,11 +136,11 @@ body {
   align-items: flex-start;
   justify-content: space-between;
   gap: 14px;
-  padding: 14px;
+  padding: 12px;
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--panel);
-  box-shadow: 0 10px 24px rgba(78, 52, 24, 0.06);
+  box-shadow: 0 8px 18px rgba(78, 52, 24, 0.05);
 }
 
 .setting__copy {
@@ -84,15 +164,22 @@ body {
   accent-color: var(--accent);
 }
 
+.substatus {
+  min-height: 18px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
 .status {
   min-height: 20px;
-  margin: 14px 2px 0;
+  margin: 0 2px;
   color: var(--accent);
   font-size: 12px;
 }
 
 .status.is-saved {
   padding: 8px 10px;
-  border-radius: 999px;
+  border-radius: 12px;
   background: var(--accent-soft);
 }

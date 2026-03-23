@@ -3,16 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Export Settings</title>
+  <title>Export Workspace</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <main class="popup">
     <header class="popup__header">
       <p class="popup__eyebrow">GPT to Markdown</p>
-      <h1>Export Settings</h1>
-      <p class="popup__desc">Control whether Markdown export keeps emojis, dividers, and the tail suggestion block.</p>
+      <h1>Export Workspace</h1>
+      <p class="popup__desc">Batch export starts here. Finish selection directly on the page.</p>
     </header>
+
+    <section class="panel" aria-label="Batch export">
+      <div class="panel__head">
+        <h2>Batch Export</h2>
+        <p>Toggle batch mode here. After that, use the same page-level Export button to select replies and export without reopening the popup.</p>
+      </div>
+
+      <div class="buttonRow">
+        <button id="toggleBatch" class="button button--primary" type="button">Start Selecting</button>
+      </div>
+
+      <p id="batchState" class="substatus">Open a ChatGPT conversation page to use batch export.</p>
+    </section>
+
+    <!-- Save folder UI intentionally disabled for now. Downloads is the default target. -->
 
     <section class="settings" aria-label="Export settings">
       <label class="setting">

@@ -43,6 +43,10 @@ if (node.classList?.contains("katex")) {
     if (tex) return `$${tex}$`;
 }
 
+if (node.dataset?.testid === "products-widget") {
+    return productWidgetToMarkdown(node);
+}
+
 // =========================
 // 3) 常规标签
 // =========================
@@ -97,6 +101,7 @@ switch (tag) {
     case "li": return children(node) + "\n";
 
     case "table": return tableToMarkdown(node);
+    case "img": return imageToMarkdown(node);
 
     case "hr": return "\n---\n\n";
     case "br": return "\n";
@@ -301,4 +306,75 @@ if (computed) {
 }
 
 return null;
+}
+
+function imageToMarkdown(node) {
+const src = node.getAttribute("src") || "";
+if (!src) return "";
+
+const alt = (node.getAttribute("alt") || "Image").replace(/\n+/g, " ").trim();
+return `![${escapeMarkdownText(alt)}](${src})`;
+}
+
+function productWidgetToMarkdown(node) {
+const cards = Array.from(node.querySelectorAll("img"))
+    .map(extractProductCard)
+    .filter(Boolean);
+
+if (!cards.length) {
+    return children(node);
+}
+
+let md = "\n### Product Suggestions\n\n";
+
+cards.forEach(card => {
+    md += `- **${escapeMarkdownText(card.title)}**\n`;
+    if (card.image) {
+    md += `  ![${escapeMarkdownText(card.title)}](${card.image})\n`;
+    }
+    if (card.meta) {
+    md += `  ${escapeMarkdownText(card.meta)}\n`;
+    }
+    md += "\n";
+});
+
+return md;
+}
+
+function extractProductCard(img) {
+const title = (img.getAttribute("alt") || "").trim();
+const image = (img.getAttribute("src") || "").trim();
+if (!title && !image) return null;
+
+const container = findProductCardContainer(img);
+
+const nameNode = container?.querySelector(".line-clamp-2, .font-medium span, .font-medium");
+const metaNode = container?.querySelector(".text-token-text-secondary");
+
+const safeTitle = (nameNode?.textContent || title || "Product").replace(/\s+/g, " ").trim();
+const safeMeta = (metaNode?.textContent || "").replace(/\s+/g, " ").trim();
+
+return {
+    title: safeTitle,
+    image,
+    meta: safeMeta
+};
+}
+
+function findProductCardContainer(node) {
+let current = node;
+
+while (current && current !== document.body) {
+    const className = current.className || "";
+    if (typeof className === "string" && (className.includes("basis-") || className.includes("shrink-0"))) {
+    return current;
+    }
+    current = current.parentElement;
+}
+
+return node.parentElement;
+}
+
+function escapeMarkdownText(text) {
+return String(text || "").replace(/([\[\]])/g, "\\$1");
 }
